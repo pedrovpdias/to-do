@@ -25,7 +25,7 @@ Aplicação simples de lista de tarefas (To-Do) desenvolvida para ajudar na orga
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/to-do.git
+git clone https://github.com/pedrovpdias/to-do.git
 
 # Acesse a pasta do projeto
 cd to-do
