@@ -1,11 +1,5 @@
 <template>
-  <div class="w-auto max-w-3xl mx-auto bg-white rounded-xl shadow-lg">
+  <main class="w-auto max-w-3xl mx-auto bg-white rounded-xl shadow-lg flex flex-col">
     <RouterView />
-  </div>
+  </main>
 </template>
-
-<script>
-  export default {
-    name: 'App'
-  }
-</script>
