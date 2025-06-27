@@ -1,6 +1,6 @@
 <template>
-  <div>
-    Olá to-do
+  <div class="w-auto max-w-3xl mx-auto bg-white rounded-xl shadow-lg">
+    <RouterView />
   </div>
 </template>
 
