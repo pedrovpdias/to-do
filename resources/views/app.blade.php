@@ -4,12 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>
+            To-do
+        </title>
 
-        @vite(['resources/css/app.css', 'resources/js/main.js'])
+        @vite(['resources/css/app.css', 'resources/js/main.ts'])
 
     </head>
-    <body>
+    <body class="antialiased font-sans">
         <div id="app">
             <app></app>
         </div>
