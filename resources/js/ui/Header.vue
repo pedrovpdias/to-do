@@ -1,6 +1,13 @@
 <script setup lang="ts">
   import Breadcrumb from '../components/Breadcrumb.vue';
 
+  const { breadcrumbLinks } = defineProps({
+    breadcrumbLinks: {
+      type: Array,
+      required: true
+    }
+  })
+
 </script>
 
 <template>
@@ -24,7 +31,7 @@
     </div>
 
     <div class="flex justify-between items-center">
-      <Breadcrumb />
+      <Breadcrumb :breadcrumbLinks="breadcrumbLinks"/>
 
       <router-link 
         to="" 

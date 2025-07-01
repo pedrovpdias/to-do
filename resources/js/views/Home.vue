@@ -1,10 +1,17 @@
 <script setup lang="ts">
   import Header from '../ui/Header.vue';
+
+  const breadcrumbLinks = [
+    {
+      to: '' as string,
+      label: 'Início' as string
+    }
+  ]
 </script>
 
 <template>
   <div>
-    <Header />
+    <Header :breadcrumbLinks="breadcrumbLinks" />
 
     <ul class="divide-y divide-slate-100 grid px-4">
       <li class="py-4">
