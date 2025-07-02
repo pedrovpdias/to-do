@@ -23,7 +23,7 @@
 
       <router-link 
         v-if="$route.name === 'Home'"
-        to="" 
+        to="/new" 
         title="Adicionar nova tarefa"
         class="size-10 aspect-square grid place-content-center rounded-full bg-sky-500 text-white text-3xl transition-colors hover:bg-sky-600"
       >
