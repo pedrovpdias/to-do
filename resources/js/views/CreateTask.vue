@@ -37,7 +37,7 @@
   <div>
     <Header :breadcrumbLinks="breadcrumbLinks" />
 
-    <section class="flex flex-col items-start h-screen p-8 gap-8">
+    <section class="flex flex-col items-start p-8 gap-8">
       <div class="flex flex-col">
         <h1 class="text-4xl font-bold font-bebas text-sky-500">
           Nova tarefa
