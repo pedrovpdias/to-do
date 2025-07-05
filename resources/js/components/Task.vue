@@ -1,4 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  defineProps({
+    task: {
+      type: Object,
+      required: true
+    }
+  })
+  
+</script>
 
 <template>
   <li class="py-4">
@@ -15,11 +23,11 @@
             <i class="bi bi-dot"></i>
           </span>
 
-          Tarefa 1
+          {{ task.title }}
         </span>
 
         <span class="font-light">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id fringilla leo, in rutrum ipsum. Vivamus pretium sem eu ex iaculis, eget interdum nunc feugiat.
+          {{ task.description }}
         </span>
       </div>
 
