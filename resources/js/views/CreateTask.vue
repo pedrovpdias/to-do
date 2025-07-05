@@ -6,7 +6,7 @@
   import Textarea from '../components/form/Textarea.vue';
   import Select from '../components/form/Select.vue';
 
-  import { useTemplateRef, onMounted } from 'vue';
+  import { useTemplateRef } from 'vue';
 
   const advancedOptions = useTemplateRef<HTMLDivElement>('advanced-options'); // Referencia do elemento de opções avançadas
 
@@ -74,38 +74,32 @@
     }
   ]
 
-  function toggleAdvancedOptions() {
-    if(advancedOptions.value) {
-      advancedOptions.value.classList.toggle('hidden');
+  // Salva a tarefa no local storage
+  function handleTaskCreation() {
+    // Cria um objeto com os dados da tarefa
+    const task = {
+      id: Date.now(), // gera um id único baseado na data/hora
+      title: (document.getElementById('title') as HTMLInputElement).value,
+      description: (document.getElementById('description') as HTMLInputElement).value,
+      deadline: (document.getElementById('deadline') as HTMLInputElement).value,
+      priority: (document.getElementById('priority') as HTMLInputElement).value,
+      category: (document.getElementById('category') as HTMLInputElement).value,
+      done: false,
+    };
 
-      const advancedOptionsFieldset = advancedOptions.value.parentElement;
+    // Busca as tarefas salvas no local storage
+    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
-      const icon = advancedOptions.value.parentElement?.querySelector('i');
+    // Adiciona a nova tarefa ao array de tarefas
+    tasks.push(task);
 
-      if(advancedOptions.value.classList.contains('hidden')) {
-        advancedOptionsFieldset?.classList.remove('border');
-        advancedOptionsFieldset?.classList.remove('rounded');
+    // Salva as tarefas atualizadas no local storage
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 
-        advancedOptionsFieldset?.classList.add('border-t');
+    // Redireciona para a tela inicial
+    window.location.href = '/';
 
-        icon?.classList.remove('bi-caret-up-fill');
-        icon?.classList.add('bi-caret-down-fill');
-      }
-
-      else {
-        advancedOptionsFieldset?.classList.remove('border-t');
-        advancedOptionsFieldset?.classList.add('border');
-        advancedOptionsFieldset?.classList.add('rounded');
-
-        icon?.classList.remove('bi-caret-down-fill');
-        icon?.classList.add('bi-caret-up-fill');
-      }
-    }
   }
-
-  onMounted(() => {
-    
-  })
 </script>
 
 <template>
@@ -118,8 +112,8 @@
           Nova tarefa
         </h1>
 
-        <p class="font-light text-sm text-slate-400 flex items-center gap-2">
-          <span class="text-xs">
+        <p class="font-light text-xs text-slate-400 flex items-center gap-2">
+          <span class="text-[0.6rem]">
             <i class="bi bi-info-circle"></i>
           </span>
           Insira abaixo os detalhes da tarefa que deseja criar
@@ -128,7 +122,7 @@
       </div>
 
       <fieldset class="grid gap-8 w-full border border-slate-100 p-8 rounded-lg">
-        <legend class="text-slate-400 px-4 text-sm">
+        <legend class="text-slate-400 px-4 text-xs">
           Detalhes da tarefa
         </legend>
 
@@ -146,9 +140,9 @@
 
         <div class="flex gap-2 items-center">
           <div class="grid gap-2">
-            <Label :htmlFor="'date'" :text="'Data de conclusão'"></Label>
+            <Label :htmlFor="'deadline'" :text="'Prazo para conclusão'"></Label>
     
-            <Input :id="'date'" :type="'date'" />
+            <Input :id="'deadline'" :type="'date'" />
           </div>
 
           <div class="grid gap-2">
@@ -164,48 +158,11 @@
           <Select :id="'category'" :options="categoryOptions" />
         </div>
 
-        <fieldset class="grid border-t border-slate-100">
-          <legend class="text-slate-400 px-4 text-sm mx-auto">
-            <button @click="toggleAdvancedOptions" class="flex items-center gap-2">
-              Opções avançadas <span class="text-xs"><i class="bi bi-caret-down-fill"></i></span>
-            </button>
-          </legend>
-
-          <div class="grid gap-8 p-8 hidden" ref="advanced-options">
-            <div class="grid gap-2">
-              <Label :htmlFor="'recurrence'" :text="'Recorrência'"></Label>
-
-              <Select :id="'recurrence'" :options="recurrenceOptions" />
-            </div>
-
-            <div class="grid gap-2">
-              <Label :htmlFor="'tags'" :text="'Tags'"></Label>
-
-              <Input :id="'tags'" :placeholder="'Insira as tags separadas por vírgula:'" />
-            </div>
-
-            <fieldset class="grid gap-4 border-t py-8 border-slate-100">
-              <legend class="text-slate-400 pr-4 text-sm">
-                Anexos
-              </legend>
-
-              <div class="grid gap-2">
-                <Label :htmlFor="'attachments'" :text="'Arquivos'"></Label>
-
-                <input type="file" id="attachments">
-              </div>
-
-              <div class="grid gap-2">
-                <Label :htmlFor="'links'" :text="'Links'"></Label>
-
-                <Input :id="'links'" :placeholder="'Insira os links separados por vírgula:'" />
-              </div>
-            </fieldset>
-          </div>
-        </fieldset>
-
         <div class="flex justify-end">
-          <button class="bg-sky-500 py-2 px-4 rounded-md text-white hover:bg-sky-600 font-semibold flex items-center">
+          <button 
+            class="bg-sky-500 py-2 px-4 rounded-md text-white hover:bg-sky-600 font-semibold flex items-center uppercase"
+            @click="handleTaskCreation"
+          >
             Criar tarefa
           </button>
         </div>
