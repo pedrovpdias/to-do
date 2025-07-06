@@ -3,7 +3,17 @@
 
   import { ref, watch, onMounted } from 'vue';
 
-  const tasks = ref([]);
+  interface Task {
+    id: number;
+    title: string;
+    description: string;
+    deadline: string;
+    priority: string;
+    category: string;
+    done: boolean;
+  }
+
+  const tasks = ref<Task[]>([]);
 
   function handleTaskDone(id: number) {
     const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
