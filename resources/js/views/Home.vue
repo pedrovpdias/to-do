@@ -7,7 +7,8 @@
       to: '' as string,
       label: 'Início' as string
     }
-  ]
+  ];
+
 </script>
 
 <template>
