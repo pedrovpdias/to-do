@@ -5,7 +5,7 @@
       required: true
     }
   });
-console.log(breadcrumbLinks);
+
 </script>
 
 <template>
