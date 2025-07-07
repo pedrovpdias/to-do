@@ -38,7 +38,8 @@
     <div class="flex justify-between items-center">
       <Breadcrumb :breadcrumbLinks="breadcrumbLinks"/>
 
-      <button 
+      <button
+        v-if="$route.name !== 'Home'"
         @click="() => router.back()" 
         title="Voltar para a página anterior"
         class="p-4 text-slate-400 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors flex items-center gap-2 text-xs w-fit"
