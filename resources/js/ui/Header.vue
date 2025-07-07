@@ -1,6 +1,10 @@
 <script setup lang="ts">
   import Breadcrumb from '../components/Breadcrumb.vue';
 
+  import { useRouter } from 'vue-router';
+
+  const router = useRouter();
+
   const { breadcrumbLinks } = defineProps({
     breadcrumbLinks: {
       type: Array,
@@ -34,15 +38,15 @@
     <div class="flex justify-between items-center">
       <Breadcrumb :breadcrumbLinks="breadcrumbLinks"/>
 
-      <router-link 
-        to="" 
-        title="Voltar para a tela inicial"
+      <button 
+        @click="() => router.back()" 
+        title="Voltar para a página anterior"
         class="p-4 text-slate-400 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors flex items-center gap-2 text-xs w-fit"
       >
         <i class="bi bi-arrow-left-short"></i>
 
         Voltar
-      </router-link>
+      </button>
     </div>
 
     <nav class="flex justify-center gap-4 border-b border-b-1 border-b-slate-200 text-slate-400">
