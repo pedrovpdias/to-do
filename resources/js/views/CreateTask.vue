@@ -6,9 +6,12 @@
   import Textarea from '../components/form/Textarea.vue';
   import Select from '../components/form/Select.vue';
 
-  import { useTemplateRef } from 'vue';
+  // import { useTemplateRef } from 'vue';
+  import { useRouter } from 'vue-router';
 
-  const advancedOptions = useTemplateRef<HTMLDivElement>('advanced-options'); // Referencia do elemento de opções avançadas
+  const router = useRouter();
+
+  // const advancedOptions = useTemplateRef<HTMLDivElement>('advanced-options'); // Referencia do elemento de opções avançadas
 
   const breadcrumbLinks = [
     {
@@ -51,28 +54,28 @@
     }
   ];
 
-  const recurrenceOptions = [
-    {
-      label: '--' as string,
-      value: '0' as string
-    },
-    {
-      label: 'Diariamente' as string,
-      value: '1' as string
-    },
-    {
-      label: 'Semanalmente' as string,
-      value: '2' as string
-    },
-    {
-      label: 'Mensalmente' as string,
-      value: '3' as string
-    },
-    {
-      label: 'Anualmente' as string,
-      value: '4' as string
-    }
-  ]
+  // const recurrenceOptions = [
+  //   {
+  //     label: '--' as string,
+  //     value: '0' as string
+  //   },
+  //   {
+  //     label: 'Diariamente' as string,
+  //     value: '1' as string
+  //   },
+  //   {
+  //     label: 'Semanalmente' as string,
+  //     value: '2' as string
+  //   },
+  //   {
+  //     label: 'Mensalmente' as string,
+  //     value: '3' as string
+  //   },
+  //   {
+  //     label: 'Anualmente' as string,
+  //     value: '4' as string
+  //   }
+  // ]
 
   // Salva a tarefa no local storage
   function handleTaskCreation() {
@@ -97,7 +100,13 @@
     localStorage.setItem('tasks', JSON.stringify(tasks));
 
     // Redireciona para a tela inicial
-    window.location.href = '/';
+    router.push({
+      path: '/',
+      query: {
+        toasType: 'success',
+        toasMessage: 'Tarefa criada com sucesso!'
+      }
+    });
 
   }
 </script>
@@ -106,7 +115,7 @@
   <div>
     <Header :breadcrumbLinks="breadcrumbLinks" />
 
-    <section class="flex flex-col items-start p-8 gap-8">
+    <form @submit.prevent="handleTaskCreation" class="flex flex-col items-start p-8 gap-8">
       <div class="flex flex-col">
         <h1 class="text-4xl font-bold font-bebas text-sky-500">
           Nova tarefa
@@ -161,12 +170,12 @@
         <div class="flex justify-end">
           <button 
             class="bg-sky-500 py-2 px-4 rounded-md text-white hover:bg-sky-600 font-semibold flex items-center uppercase"
-            @click="handleTaskCreation"
+            type="submit"
           >
             Criar tarefa
           </button>
         </div>
       </fieldset>
-    </section>
+    </form>
   </div>
 </template>

@@ -1,9 +1,14 @@
 <script setup lang="ts">
-  import { reactive } from 'vue';
-import Header from '../ui/Header.vue';
+  import Header from '../ui/Header.vue';
   import TaskList from '../ui/TaskList.vue';
 
   import Toast from '../ui/Toast.vue';
+
+  import { reactive, onMounted } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
+
+  const route = useRoute();
+  const router = useRouter();
 
   const breadcrumbLinks = [
     {
@@ -21,6 +26,15 @@ import Header from '../ui/Header.vue';
     toastProps.type = data.type;
     toastProps.message = data.message;
   }
+
+  onMounted(() => {
+    const toasType = route.query.toasType;
+    const toasMessage = route.query.toasMessage;
+
+    if(toasType && toasMessage) {
+      showToast({ type: toasType, message: toasMessage });
+    }
+  });
 
 </script>
 
