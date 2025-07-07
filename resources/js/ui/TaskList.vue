@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Task from '../components/Task.vue';
 
-  import { ref, watch, onMounted } from 'vue';
+  import { ref, watch, onMounted, defineEmits } from 'vue';
 
   interface Task {
     id: number;
@@ -15,13 +15,18 @@
 
   const tasks = ref<Task[]>([]);
 
+  const emit = defineEmits(['showToast']);
+
   function handleTaskDone(id: number) {
     const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
     const task = tasks.find((task: any) => task.id === id);
     task.done = !task.done;
     
     localStorage.setItem('tasks', JSON.stringify(tasks));
-    alert('Tarefa marcada como ' + (task.done ? 'concluida' : 'pendente'));
+
+    const toasMessage = task.done ? 'Tarefa concluída com sucesso!' : 'Tarefa marcada como pendente!';
+    
+    emit('showToast', { type: 'success', message: toasMessage });
 
     loadTasks();
   }
