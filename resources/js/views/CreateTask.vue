@@ -15,11 +15,11 @@
 
   const breadcrumbLinks = [
     {
-      to: '/' as string,
+      url: '/' as string,
       label: 'Início' as string
     },
     {
-      to: '/new' as string,
+      url: '/new' as string,
       label: 'Nova tarefa' as string
     }
   ];

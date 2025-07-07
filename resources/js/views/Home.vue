@@ -12,7 +12,7 @@
 
   const breadcrumbLinks = [
     {
-      to: '' as string,
+      url: '' as string,
       label: 'Início' as string
     }
   ];
