@@ -27,15 +27,15 @@
   const priorityOptions = [
     {
       label: 'Alta' as string,
-      value: '1' as string
+      value: 'high' as string
     },
     {
       label: 'Media' as string,
-      value: '2' as string
+      value: 'medium' as string
     },
     {
       label: 'Baixa' as string,
-      value: '3' as string
+      value: 'low' as string
     }
   ];
 
@@ -88,6 +88,7 @@
       priority: (document.getElementById('priority') as HTMLInputElement).value,
       category: (document.getElementById('category') as HTMLInputElement).value,
       done: false,
+      favorite: false,
     };
 
     // Busca as tarefas salvas no local storage
