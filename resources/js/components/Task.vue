@@ -1,7 +1,13 @@
 <script setup lang="ts">
   import PriorityIndicator from './PriorityIndicator.vue';
+  import FavoriteTaskButton from './FavoriteTaskButton.vue';
+  import TaskButton from './TaskButton.vue';
 
   import { defineEmits } from 'vue';
+
+  import { useRouter } from 'vue-router';
+
+  const router = useRouter();
 
   defineProps({
     task: {
@@ -10,12 +16,20 @@
     }
   });
 
-  const emit = defineEmits(['toggleTaskDone']);
+  const emit = defineEmits(['toggleTaskDone', 'toggleFavorite', 'handleDeleteTask']);
 
   function toggleTaskDone(id: number) {
     emit('toggleTaskDone', id);
-  }  
-  
+  }
+
+  function handleDeleteTask(id: number) {
+    emit('handleDeleteTask', id);
+  }
+
+  function editTask(id: number) {
+    router.push(`/task/${id}/edit`);
+  }
+
 </script>
 
 <template>
@@ -37,7 +51,7 @@
       <div class="flex flex-col gap-1">
         <router-link 
           :to="`/task/${task.id}`" 
-          class="font-bold flex items-center gap-4 group"
+          class="font-bold flex items-center gap-4 group w-fit"
         >
           <span class="line-clamp-1 hover:line-clamp-none group-hover:text-slate-400 transition-colors">
             {{ task.title }}
@@ -52,17 +66,11 @@
       </div>
 
       <div class="ml-auto flex gap-2">
-        <button class="size-10 aspect-square grid place-content-center rounded-full bg-sky-50 text-sky-500">
-          <i class="bi bi-star"></i>
-        </button>
+        <FavoriteTaskButton :favorite="task.favorite" :id="task.id" @toggle-favorite="emit('toggleFavorite', task.id)" />
 
-        <button class="size-10 aspect-square grid place-content-center rounded-full bg-sky-50 text-sky-500">
-          <i class="bi bi-pencil"></i>
-        </button>
+        <TaskButton @click="() => editTask(task.id)" :icon="'bi bi-pencil'" />
 
-        <button class="size-10 aspect-square grid place-content-center rounded-full bg-sky-50 text-sky-500">
-          <i class="bi bi-trash"></i>
-        </button>
+        <TaskButton @click="() => handleDeleteTask(task.id)" :icon="'bi bi-trash'" />
       </div>
     </div>
   </li>
