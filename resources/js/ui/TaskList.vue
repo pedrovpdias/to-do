@@ -18,6 +18,14 @@
 
   const emit = defineEmits(['showToast']);
 
+  const props = defineProps({
+    filter: {
+      type: String,
+      default: '',
+      required: false
+    }
+  });
+
   function handleTaskDone(id: number) {
     const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
     const task = tasks.find((task: any) => task.id === id);
@@ -58,8 +66,27 @@
     { deep: true }
   );
 
-  function loadTasks() {
-    tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]');
+  function loadTasks(filter?: string) {
+    if(filter) {
+      switch(filter) {
+        case 'done':
+          tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]').filter((task: any) => task.done);
+          break;
+        case 'favorite':
+          tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]').filter((task: any) => task.favorite);
+          break;
+        case 'today':
+          tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]').filter((task: any) => task.deadline === new Date().toISOString().split('T')[0]);
+          break;
+        case 'next':
+          tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]').filter((task: any) => task.deadline > new Date().toISOString().split('T')[0]);
+          break;
+        default:
+          tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]');
+          break;
+      }
+    }
+    else tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]');
   }
 
   onMounted(() => {
