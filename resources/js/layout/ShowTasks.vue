@@ -24,7 +24,7 @@
 
   defineProps({
     filter: String as PropType<string>,
-  });
+  }); 
 
   function showToast(data: any) { 
     toastProps.type = data.type;

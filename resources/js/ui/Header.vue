@@ -26,7 +26,7 @@
       </h1>
 
       <router-link 
-        v-if="$route.name === 'Home'"
+        v-if="$route.name !== 'NewTask'"
         to="/new" 
         title="Adicionar nova tarefa"
         class="size-10 aspect-square grid place-content-center rounded-full bg-sky-500 text-white text-3xl transition-colors hover:bg-sky-600"
@@ -39,10 +39,10 @@
       <Breadcrumb :breadcrumbLinks="breadcrumbLinks"/>
 
       <button
-        v-if="$route.name !== 'Home'"
         @click="() => router.back()" 
         title="Voltar para a página anterior"
-        class="p-4 text-slate-400 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors flex items-center gap-2 text-xs w-fit"
+        :class="[$route.name !== 'Home' ? 'flex' : 'invisible pointer-events-none opacity-0']"
+        class="p-4 text-slate-400 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors items-center gap-2 text-xs w-fit"
       >
         <i class="bi bi-arrow-left-short"></i>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Task from '../components/Task.vue';
 
-  import { ref, watch, onMounted, defineEmits } from 'vue';
+  import { ref, watch, onMounted, defineEmits, PropType } from 'vue';
 
   interface Task {
     id: number;
@@ -18,12 +18,8 @@
 
   const emit = defineEmits(['showToast']);
 
-  const props = defineProps({
-    filter: {
-      type: String,
-      default: '',
-      required: false
-    }
+  const { filter} = defineProps({
+    filter: String as PropType<string>,
   });
 
   function handleTaskDone(id: number) {
@@ -37,7 +33,7 @@
     
     emit('showToast', { type: 'success', message: toasMessage });
 
-    loadTasks();
+    loadTasks(filter);
   }
 
   function handleFavoriteTask(id: number) {
@@ -46,8 +42,8 @@
     task.favorite = !task.favorite;
 
     localStorage.setItem('tasks', JSON.stringify(tasks));
-
-    loadTasks();
+    
+    loadTasks(filter);
   }
 
   function handleDeleteTasks(id: number) {
@@ -57,40 +53,46 @@
 
     localStorage.setItem('tasks', JSON.stringify(tasks));
 
-    loadTasks();
+    loadTasks(filter);
   }
 
-  watch(
-    tasks,
-    () => localStorage.setItem('tasks', JSON.stringify(tasks.value)),
-    { deep: true }
-  );
+  // watch(
+  //   tasks,
+  //   () => localStorage.setItem('tasks', JSON.stringify(tasks.value)),
+  //   { deep: true }
+  // );
 
   function loadTasks(filter?: string) {
+    const tasksList = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+    if(!tasksList) return;
+
     if(filter) {
+      const today = new Date().toISOString().split('T')[0];
+      
       switch(filter) {
-        case 'done':
-          tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]').filter((task: any) => task.done);
-          break;
-        case 'favorite':
-          tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]').filter((task: any) => task.favorite);
-          break;
         case 'today':
-          tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]').filter((task: any) => task.deadline === new Date().toISOString().split('T')[0]);
+          tasks.value = tasksList.filter((task: any) => task.deadline === today);
           break;
         case 'next':
-          tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]').filter((task: any) => task.deadline > new Date().toISOString().split('T')[0]);
+          tasks.value = tasksList.filter((task: any) => task.deadline > today);
+          break;
+        case 'done':
+          tasks.value = tasksList.filter((task: any) => task.done);
+          break;
+        case 'favorite':
+          tasks.value = tasksList.filter((task: any) => task.favorite);
           break;
         default:
-          tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]');
+          tasks.value = tasksList;
           break;
       }
     }
-    else tasks.value = JSON.parse(localStorage.getItem('tasks') || '[]');
+    else tasks.value = tasksList;
   }
 
   onMounted(() => {
-    loadTasks();
+    loadTasks(filter);
   })
 
 </script>

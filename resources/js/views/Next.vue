@@ -4,6 +4,6 @@
 </script>
 
 <template>
-  <ShowTasks :filter="'today'" />
+  <ShowTasks :filter="'next'" />
 </template>
 

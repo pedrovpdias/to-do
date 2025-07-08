@@ -1,46 +1,40 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  const navLinks = [
+    {
+      label: 'Hoje',
+      url: '/'
+    },
+    {
+      label: 'Próximas',
+      url: '/next'
+    },
+    {
+      label: 'Concluídas',
+      url: '/done'
+    },
+    {
+      label: 'Favoritas',
+      url: '/favorite'
+    },
+    {
+      label: 'Todas',
+      url: '/all'
+    },
+  ]
+</script>
 
 <template>
   <nav class="flex justify-center gap-4 border-b border-b-1 border-b-slate-200 text-slate-400">
     <router-link 
-      to="" 
-      title="Todas as tarefas"
-      class="p-4 border-b-3 text-sky-500 border-sky-500 hover:pointer-events-none cursor-default"
+      v-for="navLink in navLinks" 
+      :key="navLink.label" 
+      :to="navLink.url" 
+      :title="navLink.label"
+      class="p-4 border-b-3 transition-colors"
+      :class="[ $route.path === navLink.url ? 'border-sky-500 text-sky-500' : 'border-transparent hover:border-sky-500 hover:text-sky-500' ]"
     >
-      Todas
-    </router-link>
-
-    <router-link 
-      to="" 
-      title="Tarefas de hoje"
-      class="p-4 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors"
-    >
-      Hoje
-    </router-link>
-
-    <router-link 
-      to="" 
-      title="Proximas tarefas"
-      class="p-4 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors"
-    >
-      Próximas
-    </router-link>
-
-    <router-link 
-      to="" 
-      title="Tarefas concluídas"
-      class="p-4 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors"
-    >
-      Concluídas
-    </router-link>
-
-    <router-link 
-      to="" 
-      title="Tarefas favoritas"
-      class="p-4 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors"
-    >
-      Favoritas
-    </router-link>
+      {{ navLink.label }}
+    </router-link>      
   </nav>
 </template>
 
