@@ -41,10 +41,11 @@
       <button
         @click="() => router.back()" 
         title="Voltar para a página anterior"
-        :class="[$route.name !== 'Home' ? 'flex' : 'invisible pointer-events-none opacity-0']"
-        class="p-4 text-slate-400 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors items-center gap-2 text-xs w-fit"
+        class="flex p-4 text-slate-400 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors items-end gap-2 text-xs w-fit"
       >
-        <i class="bi bi-arrow-left-short"></i>
+        <span class="text-[0.6rem]">
+          <i class="bi bi-chevron-left"></i>
+        </span>
 
         Voltar
       </button>
