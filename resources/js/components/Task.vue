@@ -60,7 +60,7 @@
           <PriorityIndicator :priority="task.priority" />
         </router-link>
 
-        <span class="font-light text-xs h-12 line-clamp-3 hover:line-clamp-none hover:bg-white transition-all">
+        <span class="font-light text-xs min-h-12 line-clamp-3 text-slate-500">
           {{ task.description }}
         </span>
       </div>
