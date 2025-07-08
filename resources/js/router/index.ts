@@ -6,7 +6,7 @@ import Done from '../views/Done.vue';
 import Favorite from '../views/Favorite.vue';
 import All from '../views/All.vue';
 
-import CreateTask from '../views/CreateTask.vue';
+import Create from '../views/Create.vue';
 
 const routes = [
   { 
@@ -42,7 +42,7 @@ const routes = [
   {
     path: '/new',
     name: 'Create Task',
-    component: CreateTask,
+    component: Create,
   },
 ];
 

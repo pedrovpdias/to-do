@@ -6,6 +6,10 @@
   import Textarea from '../components/form/Textarea.vue';
   import Select from '../components/form/Select.vue';
 
+  import { ref } from 'vue';
+
+  const favorite = ref(false);
+  
   // import { useTemplateRef } from 'vue';
   import { useRouter } from 'vue-router';
 
@@ -88,7 +92,7 @@
       priority: (document.getElementById('priority') as HTMLInputElement).value,
       category: (document.getElementById('category') as HTMLInputElement).value,
       done: false,
-      favorite: false,
+      favorite: favorite.value,
     };
 
     // Busca as tarefas salvas no local storage
@@ -109,6 +113,10 @@
       }
     });
 
+  }
+
+  function toggleFavorite() {
+    favorite.value = !favorite.value;
   }
 </script>
 
@@ -131,10 +139,44 @@
 
       </div>
 
-      <fieldset class="grid gap-8 w-full border border-slate-100 p-8 rounded-lg">
+      <fieldset class="grid gap-8 w-full border border-slate-100 p-8 rounded-lg relative">
         <legend class="text-slate-400 px-4 text-xs">
           Detalhes da tarefa
         </legend>
+
+        <div class="grid gap-1 absolute top-1 right-2">
+          <label for="favorite" class="text-[0.6rem] text-slate-400">
+            Marcar como favorita
+          </label>
+
+          <label 
+            for="favorite" 
+            class="grid place-content-center gap-2 size-6 aspect-square rounded-full group mx-auto text-[0.6rem]"
+            :class="[
+              favorite
+              ? 'bg-yellow-50' 
+              : 'bg-sky-50 hover:bg-sky-100 active:bg-sky-200' ]"
+          >
+            <span 
+              class="pointer-events-none"
+              :class="[
+                favorite
+                ? 'text-yellow-500' 
+                : 'text-sky-500 group-hover:text-sky-600 group-active:text-sky-700'
+              ]"
+            >
+              <i 
+                class="bi"
+                :class="[
+                  favorite
+                  ? 'bi-star-fill' 
+                  : 'bi-star' ]"
+              ></i>
+            </span>
+          </label>
+
+          <input type="checkbox" :id="'favorite'" class="hidden" @change="toggleFavorite" />
+        </div>
 
         <div class="grid gap-2">
           <Label :htmlFor="'title'" :text="'Tarefa'"></Label>
