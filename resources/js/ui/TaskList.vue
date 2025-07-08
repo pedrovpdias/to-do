@@ -83,6 +83,9 @@
         case 'favorite':
           tasks.value = tasksList.filter((task: any) => task.favorite);
           break;
+        case 'expired':
+          tasks.value = tasksList.filter((task: any) => !task.done && task.deadline < today);
+          break;
         default:
           tasks.value = tasksList;
           break;

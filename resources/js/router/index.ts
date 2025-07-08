@@ -4,6 +4,7 @@ import Home from '../views/Home.vue';
 import Next from '../views/Next.vue';
 import Done from '../views/Done.vue';
 import Favorite from '../views/Favorite.vue';
+import Expired from '../views/Expired.vue';
 import All from '../views/All.vue';
 
 import Create from '../views/Create.vue';
@@ -33,6 +34,11 @@ const routes = [
     path: '/favorite',
     name: 'Favoritas',
     component: Favorite
+  },
+  {
+    path: '/expired',
+    name: 'Expiradas',
+    component: Expired
   },
   {
     path: '/all',

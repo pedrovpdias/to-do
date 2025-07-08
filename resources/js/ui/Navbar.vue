@@ -17,6 +17,10 @@
       url: '/favorite'
     },
     {
+      label: 'Expiradas',
+      url: '/expired'
+    },
+    {
       label: 'Todas',
       url: '/all'
     },
