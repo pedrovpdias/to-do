@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import PriorityIndicator from './PriorityIndicator.vue';
+
   import { defineEmits } from 'vue';
 
   defineProps({
@@ -19,11 +21,12 @@
 <template>
   <li class="py-4">
     <div 
-      class="flex items-center gap-8 p-4 border border-slate-100 shadow-lg hover:border-sky-200 transition-colors rounded-lg"
+      class="flex items-center gap-8 p-4 outline outline-1 outline-transparent hover:outline-sky-300 transition-colors rounded-lg"
     >
       <button 
         class="size-10 aspect-square grid place-content-center rounded-full border-2 text-3xl text-center text-white"
-        :class="[ task.done 
+        :class="[ 
+          task.done 
           ? 'bg-sky-500 border-sky-500' 
           : 'border-slate-200 text-slate-200 hover:border-slate-300 hover:text-slate-300 active:border-sky-500 active:text-sky-500' ]"
         @click="toggleTaskDone(task.id)"
@@ -32,15 +35,18 @@
       </button>
     
       <div class="flex flex-col gap-1">
-        <span class="font-bold flex items-center gap-2">
-          <span class="text-red-500 text-4xl">
-            <i class="bi bi-dot"></i>
+        <router-link 
+          :to="`/task/${task.id}`" 
+          class="font-bold flex items-center gap-4 group"
+        >
+          <span class="line-clamp-1 hover:line-clamp-none group-hover:text-slate-400 transition-colors">
+            {{ task.title }}
           </span>
 
-          {{ task.title }}
-        </span>
+          <PriorityIndicator :priority="task.priority" />
+        </router-link>
 
-        <span class="font-light">
+        <span class="font-light text-xs h-12 line-clamp-3 hover:line-clamp-none hover:bg-white transition-all">
           {{ task.description }}
         </span>
       </div>
