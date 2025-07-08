@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Header from '../ui/Header.vue';
+  import Navbar from '../ui/Navbar.vue';
   import TaskList from '../ui/TaskList.vue';
 
   import Toast from '../ui/Toast.vue';
@@ -43,6 +44,8 @@
     <Toast :type="toastProps.type" :message="toastProps.message" />
 
     <Header :breadcrumbLinks="breadcrumbLinks" />
+
+    <Navbar />
 
     <h2 id="tasks-title" class="sr-only">
       Tarefas
