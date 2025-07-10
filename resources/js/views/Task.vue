@@ -16,7 +16,7 @@
 
   const breadcrumbLinks = [
     {
-      url: '' as string,
+      url: '/' as string,
       label: 'Início' as string
     },
     {
@@ -53,7 +53,7 @@
             Tarefa
           </span>
 
-          <span>
+          <span class="font-bebas text-4xl text-sky-500 w-fit max-w-xl">
             {{ task[0].title }}
           </span>
         </div>
@@ -73,8 +73,25 @@
             Prazo para conclusão
           </span>
 
-          <span>
-            {{ task[0].deadline.split('T')[0].split('-').reverse().join('/') }}
+          <span class="flex items-center gap-4">
+            {{ task[0].deadline ? task[0].deadline.split('T')[0].split('-').reverse().join('/') : '' }}
+
+            <span
+              v-if="task[0].deadline < new Date().toISOString().split('T')[0] && !task[0].done"
+              class="text-xs flex items-center gap-2  px-2 py-1 rounded-full"
+              :class="[
+                task[0].priority === 'high' ? 'text-red-500 bg-red-100' : 'text-slate-400 bg-slate-100'
+              ]"
+            >
+              <i 
+                class="bi"
+                :class="[
+                  task[0].priority === 'high' ? 'bi-exclamation-triangle' : 'bi-info-circle'
+                ]"
+              ></i>
+
+              Expirada
+            </span>
           </span>
         </div>
 
@@ -83,7 +100,7 @@
             Prioridade
           </span>
 
-          <span class="flex items-start gap-2">
+          <span class="flex items-center gap-2">
             <PriorityIndicator :priority="task[0].priority" />
 
             <span v-if="task[0].priority === 'high'">
@@ -103,11 +120,39 @@
 
         <div class="grid gap-1">
           <span class="text-slate-400 text-xs">
+            Categoria
+          </span>
+
+          <span v-if="task[0].category === '1'" class="flex items-center gap-2">
+            <i class="bi bi-briefcase-fill opacity-50"></i>
+
+            Trabalho          
+          </span>
+
+          <span v-else-if="task[0].category === '2'" class="flex items-center gap-2">
+            <i class="bi bi-people-fill opacity-50"></i>
+
+            Pessoal  
+          </span>
+
+          <span v-else class="flex items-center gap-2">
+            <i class="bi bi-mortarboard-fill opacity-50"></i>
+
+            Estudos
+          </span>
+        </div>
+
+        <div class="grid gap-1">
+          <span class="text-slate-400 text-xs">
             Status
           </span>
 
-          <span>
-            {{ task[0].done ? 'Concluida' : 'Pendente' }}
+          <span class="flex items-center gap-2">
+            <span v-if="task[0].done" class="text-sky-500 text-sm">
+              <i class="bi bi-check-circle-fill"></i>
+            </span>
+
+            {{ task[0].done ? 'Concluída' : 'Pendente' }}
           </span>
         </div>
 
