@@ -8,6 +8,7 @@ import Expired from '../views/Expired.vue';
 import All from '../views/All.vue';
 
 import Create from '../views/Create.vue';
+import Task from '../views/Task.vue';
 
 const routes = [
   { 
@@ -49,6 +50,11 @@ const routes = [
     path: '/new',
     name: 'Create Task',
     component: Create,
+  },
+  {
+    path: '/task/:id',
+    name: 'Task',
+    component: Task,
   },
 ];
 
