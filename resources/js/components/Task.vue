@@ -1,13 +1,8 @@
 <script setup lang="ts">
   import PriorityIndicator from './PriorityIndicator.vue';
-  import FavoriteTaskButton from './FavoriteTaskButton.vue';
-  import TaskButton from './TaskButton.vue';
+  import TaskButtonGroup from './TaskButtonGroup.vue';
 
   import { defineEmits } from 'vue';
-
-  import { useRouter } from 'vue-router';
-
-  const router = useRouter();
 
   defineProps({
     task: {
@@ -20,14 +15,6 @@
 
   function toggleTaskDone(id: number) {
     emit('toggleTaskDone', id);
-  }
-
-  function handleDeleteTask(id: number) {
-    emit('handleDeleteTask', id);
-  }
-
-  function editTask(id: number) {
-    router.push(`/task/${id}/edit`);
   }
 
 </script>
@@ -65,13 +52,11 @@
         </span>
       </div>
 
-      <div class="ml-auto flex gap-2">
-        <FavoriteTaskButton :favorite="task.favorite" :id="task.id" @toggle-favorite="emit('toggleFavorite', task.id)" />
-
-        <TaskButton @click="() => editTask(task.id)" :icon="'bi bi-pencil'" />
-
-        <TaskButton @click="() => handleDeleteTask(task.id)" :icon="'bi bi-trash'" />
-      </div>
+      <TaskButtonGroup 
+        :task="task" 
+        @handle-delete-task="emit('handleDeleteTask', task.id)" 
+        @toggle-favorite="emit('toggleFavorite', task.id)" 
+      />
     </div>
   </li>
 </template>

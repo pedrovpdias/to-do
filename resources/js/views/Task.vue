@@ -1,9 +1,15 @@
 <script setup lang="ts">
   import Header from '../ui/Header.vue';
 
-  import { useRoute } from 'vue-router';
-  
+  import PriorityIndicator from '../components/PriorityIndicator.vue';
+  import TaskButtonGroup from '../components/TaskButtonGroup.vue';
 
+  import { useRoute } from 'vue-router';
+
+  import { defineEmits } from 'vue';
+
+  const emit = defineEmits(['toggleFavorite', 'handleDeleteTask']);
+  
   // Pega a ID da tarefa da URL
   const route = useRoute();
   const taskId = route.params.id;
@@ -34,7 +40,13 @@
         Tarefa
       </h2>
 
-      <div class="grid gap-2 p-8">
+      <div class="grid gap-4 p-8">
+        <TaskButtonGroup 
+          :task="task[0]" 
+          @handle-delete-task="emit('handleDeleteTask', task[0].id)" 
+          @toggle-favorite="emit('toggleFavorite', task[0].id)" 
+        />
+
         <div class="grid gap-1">
           <span class="text-slate-400 text-xs">
             Tarefa
@@ -61,7 +73,7 @@
           </span>
 
           <span>
-            {{ task[0].deadline }}
+            {{ task[0].deadline.split('T')[0].split('-').reverse().join('/') }}
           </span>
         </div>
 
@@ -70,9 +82,22 @@
             Prioridade
           </span>
 
-          <span>
-            {{ task[0].priority }}
+          <span class="flex items-start gap-2">
+            <PriorityIndicator :priority="task[0].priority" />
+
+            <span v-if="task[0].priority === 'high'">
+              Alta
+            </span>
+
+            <span v-else-if="task[0].priority === 'medium'">
+              Média
+            </span>
+
+            <span v-else>
+              Baixa
+            </span>
           </span>
+            
         </div>
 
         <div class="grid gap-1">
@@ -91,7 +116,7 @@
           </span>
 
           <span>
-            {{ task[0].created_at }}
+            {{ task[0].created_at ? task[0].created_at.split('T')[0].split('-').reverse().join('/') : '' }}
           </span>
         </div>
       </div>
