@@ -40,11 +40,12 @@
         Tarefa
       </h2>
 
-      <div class="grid gap-4 p-8">
+      <div class="grid gap-4 p-8 border-t border-t-1 border-t-slate-200 relative">
         <TaskButtonGroup 
           :task="task[0]" 
           @handle-delete-task="emit('handleDeleteTask', task[0].id)" 
-          @toggle-favorite="emit('toggleFavorite', task[0].id)" 
+          @toggle-favorite="emit('toggleFavorite', task[0].id)"
+          class="absolute top-8 right-8"
         />
 
         <div class="grid gap-1">
