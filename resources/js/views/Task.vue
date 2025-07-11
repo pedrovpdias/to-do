@@ -39,7 +39,17 @@
 
   window.addEventListener('storage', (event) => {
     if (event.key === 'tasks') {
-      showUpdateBanner.value = true;
+      const updatedTask = JSON.parse(localStorage.getItem('tasks') || '[]').find((t: any) => t.id == taskId) || null;
+
+      if(updatedTask){
+        if(  updatedTask.title === task.value.title && updatedTask.description === task.value.description && updatedTask.deadline === task.value.deadline && updatedTask.priority === task.value.priority && updatedTask.category === task.value.category && updatedTask.done === task.value.done && updatedTask.favorite === task.value.favorite) {
+          return;
+        }
+
+        showUpdateBanner.value = true;
+      }
+      
+      else return;
     }
   });
 
