@@ -2,27 +2,33 @@
   const navLinks = [
     {
       label: 'Hoje',
-      url: '/'
+      url: '/',
+      notification: false
     },
     {
       label: 'Próximas',
-      url: '/next'
+      url: '/next',
+      notification: false
     },
     {
       label: 'Concluídas',
-      url: '/done'
+      url: '/done',
+      notification: false
     },
     {
       label: 'Favoritas',
-      url: '/favorite'
+      url: '/favorite',
+      notification: false
     },
     {
       label: 'Expiradas',
-      url: '/expired'
+      url: '/expired',
+      notification: false
     },
     {
       label: 'Todas',
-      url: '/all'
+      url: '/all',
+      notification: false
     },
   ]
 </script>

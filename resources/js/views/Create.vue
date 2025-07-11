@@ -93,6 +93,7 @@
       category: (document.getElementById('category') as HTMLInputElement).value,
       done: false,
       favorite: favorite.value,
+      created_at: new Date().toISOString()
     };
 
     // Busca as tarefas salvas no local storage
