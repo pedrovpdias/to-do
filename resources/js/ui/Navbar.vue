@@ -1,15 +1,35 @@
 <script setup lang="ts">
-  const tasks = localStorage.getItem(`tasks`) ? JSON.parse(localStorage.getItem(`tasks`) || '[]') : null;
+  import { ref, computed, watchEffect } from 'vue';
 
-  const expiredTasks = tasks.filter((task: any) => !task.done && task.deadline < new Date().toISOString().split('T')[0]);
-  const highPriorityExpiredTasks = expiredTasks.filter((task: any) => task.priority === 'high'); console.log(highPriorityExpiredTasks)
-  const todayTasks = tasks.filter((task: any) => task.deadline === new Date().toISOString().split('T')[0]);
+  const tasks = ref<any[]>([]);
 
-  const navLinks = [
+  // Carrega do localStorage ao iniciar
+  const loadTasks = () => {
+    const saved = localStorage.getItem('tasks');
+    tasks.value = saved ? JSON.parse(saved) : [];
+  };
+
+  loadTasks();
+
+  const today = new Date().toISOString().split('T')[0];
+
+  const expiredTasks = computed(() =>
+    tasks.value.filter(task => !task.done && task.deadline < today)
+  );
+
+  const highPriorityExpiredTasks = computed(() =>
+    expiredTasks.value.filter(task => task.priority === 'high')
+  );
+
+  const todayTasks = computed(() =>
+    tasks.value.filter(task => task.deadline === today)
+  );
+
+  const navLinks = computed(() => [
     {
       label: 'Hoje',
       url: '/',
-      notification: todayTasks.filter((task: any) => task.done === false).length > 0
+      notification: todayTasks.value.some(task => !task.done)
     },
     {
       label: 'Próximas',
@@ -29,14 +49,24 @@
     {
       label: 'Expiradas',
       url: '/expired',
-      notification: highPriorityExpiredTasks > 0 ? true : false
+      notification: highPriorityExpiredTasks.value.length > 0
     },
     {
       label: 'Todas',
       url: '/all',
       notification: false
     },
-  ]
+  ]);
+
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'tasks') {
+      loadTasks();
+    }
+  });
+
+  window.addEventListener('tasks-updated', () => {
+    loadTasks();
+  });
 </script>
 
 <template>

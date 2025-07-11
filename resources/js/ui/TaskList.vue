@@ -32,6 +32,7 @@
     const toasMessage = task.done ? 'Tarefa concluída com sucesso!' : 'Tarefa marcada como pendente!';
     
     emit('showToast', { type: 'success', message: toasMessage });
+    window.dispatchEvent(new Event('tasks-updated'));
 
     loadTasks(filter);
   }
