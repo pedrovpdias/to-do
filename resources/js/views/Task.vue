@@ -6,9 +6,14 @@
 
   import { useRoute } from 'vue-router';
 
-  import { defineEmits } from 'vue';
+  import { defineEmits, ref } from 'vue';
 
   const emit = defineEmits(['toggleFavorite', 'handleDeleteTask']);
+
+  const tasks = ref<any[]>([]);
+  const task = ref<any>(null);
+  const updateBanner = ref(false);
+  const showUpdateBanner = ref(false);
   
   // Pega a ID da tarefa da URL
   const route = useRoute();
@@ -25,10 +30,32 @@
     }
   ];
 
-  const tasks = localStorage.getItem(`tasks`) ? JSON.parse(localStorage.getItem(`tasks`) || '[]') : null;
-  const task = tasks ? tasks.filter((task: any) => task.id == taskId) : null;
-  
+  function loadTask() {
+    const saved = localStorage.getItem('tasks');
+    tasks.value = saved ? JSON.parse(saved) : [];
 
+    task.value = tasks.value.find((t: any) => t.id == taskId) || null;
+  }
+
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'tasks') {
+      showUpdateBanner.value = true;
+    }
+  });
+
+  loadTask();
+  
+  function formatDate(dateStr: string | undefined) {
+    if (!dateStr || typeof dateStr !== 'string') return '';
+
+    const [year, month, day] = dateStr.split('T')[0].split('-');
+    return `${day}/${month}/${year}`;
+  }
+
+  function updateTask() {
+    showUpdateBanner.value = false;
+    loadTask();
+  }
 </script>
 
 <template>
@@ -41,10 +68,27 @@
       </h2>
 
       <div class="grid gap-4 p-8 border-t border-t-1 border-t-slate-200 relative">
+        <button
+          ref="updateBanner"
+          type="button"
+          @click="updateTask"
+          :class="[
+            showUpdateBanner ? 'grid' : 'hidden'
+          ]"
+        >
+          <button 
+            class="absolute top-0 left-0 right-0 w-auto bg-sky-100 py-1 px-2 text-sky-500 hover:bg-sky-200 flex items-center justify-center gap-2 text-xs transition-colors"
+            
+          >
+            <i class="bi bi-arrow-clockwise"></i>
+            Atualizar
+          </button>
+        </button>
+
         <TaskButtonGroup 
-          :task="task[0]" 
-          @handle-delete-task="emit('handleDeleteTask', task[0].id)" 
-          @toggle-favorite="emit('toggleFavorite', task[0].id)"
+          :task="task" 
+          @handle-delete-task="emit('handleDeleteTask', task.id)" 
+          @toggle-favorite="emit('toggleFavorite', task.id)"
           class="absolute top-8 right-8"
         />
 
@@ -54,7 +98,7 @@
           </span>
 
           <span class="font-bebas text-4xl text-sky-500 w-fit max-w-xl">
-            {{ task[0].title }}
+            {{ task.title }}
           </span>
         </div>
 
@@ -64,7 +108,7 @@
           </span>
 
           <span>
-            {{ task[0].description }}
+            {{ task.description }}
           </span>
         </div>
 
@@ -74,19 +118,19 @@
           </span>
 
           <span class="flex items-center gap-4">
-            {{ task[0].deadline ? task[0].deadline.split('T')[0].split('-').reverse().join('/') : '' }}
+            {{ formatDate(task.deadline) }}
 
             <span
-              v-if="task[0].deadline < new Date().toISOString().split('T')[0] && !task[0].done"
+              v-if="task.deadline < new Date().toISOString().split('T') && !task.done"
               class="text-xs flex items-center gap-2  px-2 py-1 rounded-full"
               :class="[
-                task[0].priority === 'high' ? 'text-red-500 bg-red-100' : 'text-slate-400 bg-slate-100'
+                task.priority === 'high' ? 'text-red-500 bg-red-100' : 'text-slate-400 bg-slate-100'
               ]"
             >
               <i 
                 class="bi"
                 :class="[
-                  task[0].priority === 'high' ? 'bi-exclamation-triangle' : 'bi-info-circle'
+                  task.priority === 'high' ? 'bi-exclamation-triangle' : 'bi-info-circle'
                 ]"
               ></i>
 
@@ -101,13 +145,13 @@
           </span>
 
           <span class="flex items-center gap-2">
-            <PriorityIndicator :priority="task[0].priority" />
+            <PriorityIndicator :priority="task.priority" />
 
-            <span v-if="task[0].priority === 'high'">
+            <span v-if="task.priority === 'high'">
               Alta
             </span>
 
-            <span v-else-if="task[0].priority === 'medium'">
+            <span v-else-if="task.priority === 'medium'">
               Média
             </span>
 
@@ -123,13 +167,13 @@
             Categoria
           </span>
 
-          <span v-if="task[0].category === '1'" class="flex items-center gap-2">
+          <span v-if="task.category === '1'" class="flex items-center gap-2">
             <i class="bi bi-briefcase-fill opacity-50"></i>
 
             Trabalho          
           </span>
 
-          <span v-else-if="task[0].category === '2'" class="flex items-center gap-2">
+          <span v-else-if="task.category === '2'" class="flex items-center gap-2">
             <i class="bi bi-people-fill opacity-50"></i>
 
             Pessoal  
@@ -148,11 +192,11 @@
           </span>
 
           <span class="flex items-center gap-2">
-            <span v-if="task[0].done" class="text-sky-500 text-sm">
+            <span v-if="task.done" class="text-sky-500 text-sm">
               <i class="bi bi-check-circle-fill"></i>
             </span>
 
-            {{ task[0].done ? 'Concluída' : 'Pendente' }}
+            {{ task.done ? 'Concluída' : 'Pendente' }}
           </span>
         </div>
 
@@ -162,7 +206,7 @@
           </span>
 
           <span>
-            {{ task[0].created_at ? task[0].created_at.split('T')[0].split('-').reverse().join('/') : '' }}
+            {{ formatDate(task.created_at) }}
           </span>
         </div>
       </div>
