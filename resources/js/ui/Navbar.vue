@@ -1,9 +1,15 @@
 <script setup lang="ts">
+  const tasks = localStorage.getItem(`tasks`) ? JSON.parse(localStorage.getItem(`tasks`) || '[]') : null;
+
+  const expiredTasks = tasks.filter((task: any) => !task.done && task.deadline < new Date().toISOString().split('T')[0]);
+  const highPriorityExpiredTasks = expiredTasks.filter((task: any) => task.priority === 'high'); console.log(highPriorityExpiredTasks)
+  const todayTasks = tasks.filter((task: any) => task.deadline === new Date().toISOString().split('T')[0]);
+
   const navLinks = [
     {
       label: 'Hoje',
       url: '/',
-      notification: false
+      notification: todayTasks.filter((task: any) => task.done === false).length > 0
     },
     {
       label: 'Próximas',
@@ -23,7 +29,7 @@
     {
       label: 'Expiradas',
       url: '/expired',
-      notification: false
+      notification: highPriorityExpiredTasks > 0 ? true : false
     },
     {
       label: 'Todas',
@@ -40,11 +46,16 @@
       :key="navLink.label" 
       :to="navLink.url" 
       :title="navLink.label"
-      class="p-4 border-b-3 transition-colors"
+      class="relative p-4 border-b-3 transition-colors"
       :class="[ $route.path === navLink.url ? 'border-sky-500 text-sky-500' : 'border-transparent hover:border-sky-500 hover:text-sky-500' ]"
     >
       {{ navLink.label }}
-    </router-link>      
+
+      <span v-if="navLink.notification" class="absolute top-4 right-0">
+        <span class="absolute top-0 right-0 size-2 aspect-square rounded-full bg-red-400 animate-ping"></span>
+        <span class="absolute top-0 right-0 size-2 aspect-square rounded-full bg-red-500"></span>
+      </span>
+    </router-link>
   </nav>
 </template>
 
