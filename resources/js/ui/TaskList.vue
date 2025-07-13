@@ -37,26 +37,6 @@
     loadTasks(filter);
   }
 
-  function handleFavoriteTask(id: number) {
-    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    const task = tasks.find((task: any) => task.id === id);
-    task.favorite = !task.favorite;
-
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    
-    loadTasks(filter);
-  }
-
-  function handleDeleteTasks(id: number) {
-    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    const taskIndex = tasks.findIndex((task: any) => task.id === id);
-    tasks.splice(taskIndex, 1);
-
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-
-    loadTasks(filter);
-  }
-
   // watch(
   //   tasks,
   //   () => localStorage.setItem('tasks', JSON.stringify(tasks.value)),
@@ -65,7 +45,7 @@
 
   function loadTasks(filter?: string) {
     const tasksList = JSON.parse(localStorage.getItem('tasks') || '[]');
-
+    
     if(!tasksList) return;
 
     if(filter) {
@@ -111,10 +91,10 @@
     <Task 
       v-for="task in tasks" 
       :key="task.id" 
-      :task="task" 
+      :task="task"
+      :filter="filter"
       @toggle-task-done="handleTaskDone" 
-      @toggle-favorite="handleFavoriteTask"
-      @handle-delete-task="handleDeleteTasks"
+      @load-tasks="loadTasks(filter)"
     />
   </ul>
 

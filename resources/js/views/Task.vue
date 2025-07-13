@@ -4,9 +4,9 @@
   import PriorityIndicator from '../components/PriorityIndicator.vue';
   import TaskButtonGroup from '../components/TaskButtonGroup.vue';
 
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
 
-  import { defineEmits, ref } from 'vue';
+  import { defineEmits, ref, onMounted } from 'vue';
 
   const emit = defineEmits(['toggleFavorite', 'handleDeleteTask']);
 
@@ -17,6 +17,7 @@
   
   // Pega a ID da tarefa da URL
   const route = useRoute();
+  const router = useRouter();
   const taskId = route.params.id;
 
   const breadcrumbLinks = [
@@ -30,11 +31,21 @@
     }
   ];
 
-  function loadTask() {
+  function loadTask(filter?: string) {
     const saved = localStorage.getItem('tasks');
     tasks.value = saved ? JSON.parse(saved) : [];
 
     task.value = tasks.value.find((t: any) => t.id == taskId) || null;
+
+    if(!task.value) {
+      router.push({
+        path: '/',
+        query: {
+          toasType: 'success',
+          toasMessage: 'Tarefa excluída com sucesso!'
+        }
+      });
+    }
   }
 
   window.addEventListener('storage', (event) => {
@@ -66,6 +77,18 @@
     showUpdateBanner.value = false;
     loadTask();
   }
+
+  onMounted(() => {
+    if(!task.value) {
+      router.push({
+        path: '/',
+        query: {
+          toasType: 'error',
+          toasMessage: 'Tarefa não encontrada!'
+        }
+      });
+    }
+  })
 </script>
 
 <template>
@@ -96,9 +119,9 @@
         </button>
 
         <TaskButtonGroup 
-          :task="task" 
-          @handle-delete-task="emit('handleDeleteTask', task.id)" 
-          @toggle-favorite="emit('toggleFavorite', task.id)"
+          :task="task"
+          :filter="''"
+          @load-tasks="loadTask()"
           class="absolute top-8 right-8"
         />
 

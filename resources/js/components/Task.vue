@@ -2,16 +2,21 @@
   import PriorityIndicator from './PriorityIndicator.vue';
   import TaskButtonGroup from './TaskButtonGroup.vue';
 
-  import { defineEmits } from 'vue';
+  import { defineEmits, PropType } from 'vue';
 
   defineProps({
     task: {
       type: Object,
       required: true
-    }
+    },
+    filter: String as PropType<string>,
   });
 
-  const emit = defineEmits(['toggleTaskDone', 'toggleFavorite', 'handleDeleteTask']);
+  const emit = defineEmits(['toggleTaskDone', 'loadTasks']);
+
+  function loadTasks(filter?: string) {
+    emit('loadTasks', filter);
+  }
 
   function toggleTaskDone(id: number) {
     emit('toggleTaskDone', id);
@@ -54,8 +59,8 @@
 
       <TaskButtonGroup 
         :task="task" 
-        @handle-delete-task="emit('handleDeleteTask', task.id)" 
-        @toggle-favorite="emit('toggleFavorite', task.id)" 
+        :filter="filter"
+        @load-tasks="loadTasks(filter);" 
       />
     </div>
   </li>
