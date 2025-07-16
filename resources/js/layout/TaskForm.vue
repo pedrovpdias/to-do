@@ -6,9 +6,39 @@
   import Textarea from '../components/form/Textarea.vue';
   import Select from '../components/form/Select.vue';
 
-  import { ref } from 'vue';
+  import { ref, onMounted, defineEmits } from 'vue';
+
+  import { useRoute, useRouter } from 'vue-router';
+
+  const emit = defineEmits(['submit']);
 
   const favorite = ref(false);
+
+  interface Task {
+    id: number;
+    title: string;
+    description: string;
+    priority: string;
+    category: string;
+    deadline: string;
+    done: boolean;
+    favorite: boolean;
+  }
+
+  const task = ref<Task>({
+    id: 0,
+    title: '',
+    description: '',
+    priority: '',
+    category: '',
+    deadline: '',
+    done: false,
+    favorite: false
+  });
+
+  const route = useRoute();
+  const router = useRouter();
+  const taskId = route.params.id;
 
   defineProps({
     title: String as any,
@@ -51,13 +81,31 @@
   function toggleFavorite() {
     favorite.value = !favorite.value;
   }
+
+  onMounted(() => {
+    if(taskId) {
+      task.value = JSON.parse(localStorage.getItem('tasks') || '[]').find((t: any) => t.id == taskId) || null;
+    }
+
+    console.log(task.value);
+  });
+
+  function handleSubmit() {
+    // Armazena novos valores vindos do formulário
+    const newTaskValues = {
+      
+    }
+    
+    emit('submit', task.value);
+  }
+
 </script>
 
 <template>
   <div>
       <Header :breadcrumbLinks="breadcrumbLinks" />
     
-      <form @submit.prevent="" class="flex flex-col items-start p-8 gap-8">
+    <form @submit.prevent="" class="flex flex-col items-start p-8 gap-8" @submit="handleSubmit" novalidate>
         <div class="flex flex-col">
           <h1 class="text-4xl font-bold font-bebas text-sky-500">
             {{ title }}
@@ -108,39 +156,77 @@
               </span>
             </label>
 
-            <input type="checkbox" :id="'favorite'" class="hidden" @change="toggleFavorite" />
+            <input 
+              type="checkbox" 
+              id="favorite" 
+              class="hidden"
+              ref="favorite" 
+              @change="toggleFavorite" 
+            />
           </div>
 
           <div class="grid gap-2">
             <Label :htmlFor="'title'" :text="'Tarefa'"></Label>
 
-            <Input :id="'title'" :placeholder="'Insira o nome da tarefa:'" />
+            <Input 
+              :id="'title'"
+              :inputRef="'title'" 
+              :placeholder="'Insira o nome da tarefa:'" 
+              :vModel="task.title" 
+              :value="task.title.toString()" 
+              required 
+            />
           </div>
 
           <div class="grid gap-2">
             <Label :htmlFor="'description'" :text="'Descrição'"></Label>
 
-            <Textarea :id="'description'" :placeholder="'Insira uma descrição sobre os detalhes da tarefa:'"/>
+            <Textarea
+              :id="'description'"
+              :textareaRef="'description'"
+              :placeholder="'Insira uma descrição sobre os detalhes da tarefa:'"
+              vModel="task.description"
+              :value="task.description.toString()" 
+            />
           </div>
 
-          <div class="flex gap-2 items-center">
+          <div class="flex gap-8 items-center">
             <div class="grid gap-2">
               <Label :htmlFor="'deadline'" :text="'Prazo para conclusão'"></Label>
       
-              <Input :id="'deadline'" :type="'date'" />
+              <Input 
+                :id="'deadline'"
+                :inputRef="'deadline'"
+                :type="'date'" 
+                :vModel="task.deadline" 
+                :value="task.deadline.toString()
+                " 
+              />
             </div>
 
             <div class="grid gap-2">
               <Label :htmlFor="'priority'" :text="'Prioridade'"></Label>
 
-              <Select :id="'priority'" :options="priorityOptions" />
+              <Select 
+                :id="'priority'"
+                :selectRef="'priority'"
+                :options="priorityOptions"
+                :vModel="task.priority" 
+                :value="task.priority.toString()" 
+              />
             </div>
           </div>
 
           <div class="grid gap-2">
             <Label :htmlFor="'category'" :text="'Categoria'"></Label>
 
-            <Select :id="'category'" :options="categoryOptions" />
+            <Select 
+              :id="'category'"
+              :selectRef="'category'"
+              :options="categoryOptions" 
+              :vModel="task.category" 
+              :value="task.category.toString()"
+            />
           </div>
 
           <div class="flex justify-end">
