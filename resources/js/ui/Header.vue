@@ -4,14 +4,22 @@
   import { useRouter } from 'vue-router';
 
   const router = useRouter();
+  const history = window.history.state.back;
+  console.log(history);
 
   const { breadcrumbLinks } = defineProps({
     breadcrumbLinks: {
       type: Array,
       required: true
     }
-  })
+  });
 
+  function getBack() {
+    if(history) {
+      router.go(-1);
+    }
+  }
+  
 </script>
 
 <template>
@@ -39,15 +47,14 @@
       <Breadcrumb :breadcrumbLinks="breadcrumbLinks"/>
 
       <button
-        @click="() => router.back()" 
+        @click="getBack()" 
         title="Voltar para a página anterior"
-        class="flex p-4 text-slate-400 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors items-end gap-2 text-xs w-fit"
+        class="flex p-4 text-slate-400 hover:bg-sky-50 hover:text-sky-500 active:bg-sky-100 transition-colors items-end gap-2 text-xs w-fit border border-slate-100 rounded-lg border-r-0 rounded-r-none hover:border-sky-100"
+        :class="[
+          history === null || $route.name === 'Home' ? 'cursor-default pointer-events-none opacity-50' : ''
+        ]"
       >
-        <span class="text-[0.6rem]">
-          <i class="bi bi-chevron-left"></i>
-        </span>
-
-        Voltar
+        <i class="bi bi-chevron-left"></i>
       </button>
     </div>
   </header>
