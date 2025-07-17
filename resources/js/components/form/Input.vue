@@ -43,7 +43,11 @@
     :event="event || null"
     :v-model="vModel || null"
     :value="value || null"
-    class="border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-300/50 outline-none block w-full rounded-md py-1.5 px-2 sm:text-sm sm:leading-6 placeholder:text-slate-400"
+    :class="[
+      type !== 'hidden' 
+        ? 'border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-300/50 outline-none block w-full rounded-md py-1.5 px-2 sm:text-sm sm:leading-6 placeholder:text-slate-400' 
+        : ''
+    ]"
   />
 </template>
 
