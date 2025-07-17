@@ -35,7 +35,7 @@
     }
   ];
 
-  function handleUpdate(task: any) { console.log(task);
+  function handleUpdate(task: any) {
     tasks.value = tasks.value.map((t: any) => t.id == task.id ? task : t);
     localStorage.setItem('tasks', JSON.stringify(tasks.value));
     

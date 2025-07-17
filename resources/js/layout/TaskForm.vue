@@ -6,7 +6,7 @@
   import Textarea from '../components/form/Textarea.vue';
   import Select from '../components/form/Select.vue';
 
-  import { ref, onMounted, defineEmits } from 'vue';
+  import { ref, onMounted } from 'vue';
 
   import { useRoute, useRouter } from 'vue-router';
 
@@ -15,7 +15,7 @@
   const favorite = ref(false);
 
   interface Task {
-    id: number;
+    id: string | number | null;
     title: string;
     description: string;
     priority: string;
@@ -23,17 +23,19 @@
     deadline: string;
     done: boolean;
     favorite: boolean;
+    created_at: string;
   }
 
   const task = ref<Task>({
-    id: 0,
+    id: '',
     title: '',
     description: '',
     priority: '',
     category: '',
     deadline: '',
     done: false,
-    favorite: false
+    favorite: false,
+    created_at: ''
   });
 
   const route = useRoute();
@@ -86,17 +88,23 @@
     if(taskId) {
       task.value = JSON.parse(localStorage.getItem('tasks') || '[]').find((t: any) => t.id == taskId) || null;
     }
-
-    console.log(task.value);
   });
 
   function handleSubmit() {
     // Armazena novos valores vindos do formulário
-    const newTaskValues = {
-      
-    }
-    
-    emit('submit', task.value);
+    const newTaskValues = ref<Task>({
+      id: (document.getElementById('id') as HTMLInputElement).value ? (document.getElementById('id') as HTMLInputElement).value : Date.now(),
+      title: (document.getElementById('title') as HTMLInputElement).value,
+      description: (document.getElementById('description') as HTMLInputElement).value,
+      priority: (document.getElementById('priority') as HTMLInputElement).value,
+      category: (document.getElementById('category') as HTMLInputElement).value,
+      deadline: (document.getElementById('deadline') as HTMLInputElement).value, 
+      done: task.value.done,
+      favorite: favorite.value,
+      created_at: task.value.created_at
+    });
+
+    emit('submit', newTaskValues.value);
   }
 
 </script>
@@ -167,6 +175,15 @@
 
           <div class="grid gap-2">
             <Label :htmlFor="'title'" :text="'Tarefa'"></Label>
+
+            <Input
+              v-if="task.id"
+              :id="'id'"
+              :inputRef="'id'"
+              :type="'hidden'"
+              :vModel="task.id" 
+              :value="task.id.toString()" 
+            />
 
             <Input 
               :id="'title'"
