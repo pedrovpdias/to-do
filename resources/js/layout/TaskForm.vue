@@ -93,7 +93,7 @@
   function handleSubmit() {
     // Armazena novos valores vindos do formulário
     const newTaskValues = ref<Task>({
-      id: (document.getElementById('id') as HTMLInputElement).value ? (document.getElementById('id') as HTMLInputElement).value : Date.now(),
+      id: (document.getElementById('id') as HTMLInputElement) ? (document.getElementById('id') as HTMLInputElement).value : Date.now(),
       title: (document.getElementById('title') as HTMLInputElement).value,
       description: (document.getElementById('description') as HTMLInputElement).value,
       priority: (document.getElementById('priority') as HTMLInputElement).value,
@@ -101,7 +101,7 @@
       deadline: (document.getElementById('deadline') as HTMLInputElement).value, 
       done: task.value.done,
       favorite: favorite.value,
-      created_at: task.value.created_at
+      created_at: task.value.created_at ? task.value.created_at : new Date().toISOString()
     });
 
     emit('submit', newTaskValues.value);
