@@ -1,9 +1,5 @@
 <script setup lang="ts">
   import TaskForm from '../layout/TaskForm.vue';
-
-  import { ref } from 'vue';
-
-  const favorite = ref(false);
   
   // import { useTemplateRef } from 'vue';
   import { useRouter } from 'vue-router';
@@ -20,36 +16,6 @@
     {
       url: '/new' as string,
       label: 'Nova tarefa' as string
-    }
-  ];
-
-  const priorityOptions = [
-    {
-      label: 'Alta' as string,
-      value: 'high' as string
-    },
-    {
-      label: 'Media' as string,
-      value: 'medium' as string
-    },
-    {
-      label: 'Baixa' as string,
-      value: 'low' as string
-    }
-  ];
-
-  const categoryOptions = [
-    {
-      label: 'Trabalho' as string,
-      value: '1' as string
-    },
-    {
-      label: 'Pessoal' as string,
-      value: '2' as string
-    },
-    {
-      label: 'Estudos' as string,
-      value: '3' as string
     }
   ];
 
@@ -98,9 +64,6 @@
 
   }
 
-  function toggleFavorite() {
-    favorite.value = !favorite.value;
-  }
 </script>
 
 <template>

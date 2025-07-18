@@ -12,8 +12,6 @@
 
   const emit = defineEmits(['submit']);
 
-  const favorite = ref(false);
-
   interface Task {
     id: string | number | null;
     title: string;
@@ -37,6 +35,8 @@
     favorite: false,
     created_at: ''
   });
+
+  const favorite = ref(false);
 
   const route = useRoute();
   const router = useRouter();
@@ -87,6 +87,8 @@
   onMounted(() => {
     if(taskId) {
       task.value = JSON.parse(localStorage.getItem('tasks') || '[]').find((t: any) => t.id == taskId) || null;
+
+      favorite.value = task.value.favorite;
     }
   });
 
@@ -103,7 +105,7 @@
       favorite: favorite.value,
       created_at: task.value.created_at ? task.value.created_at : new Date().toISOString()
     });
-
+    
     emit('submit', newTaskValues.value);
   }
 
@@ -168,7 +170,6 @@
               type="checkbox" 
               id="favorite" 
               class="hidden"
-              ref="favorite" 
               @change="toggleFavorite" 
             />
           </div>
