@@ -77,7 +77,7 @@
   // ]
 
   // Salva a tarefa no local storage
-  function handleTaskCreation(task: any) { console.log(task) /*
+  function handleTaskCreation(task: any) {
     // Busca as tarefas salvas no local storage
     const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
@@ -94,7 +94,7 @@
         toasType: 'success',
         toasMessage: 'Tarefa criada com sucesso!'
       }
-    });*/
+    });
 
   }
 
