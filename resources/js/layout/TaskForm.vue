@@ -13,7 +13,7 @@
   const emit = defineEmits(['submit']);
 
   interface Task {
-    id: string | number | null;
+    id: number | null;
     title: string;
     description: string;
     priority: string;
@@ -25,7 +25,7 @@
   }
 
   const task = ref<Task>({
-    id: '',
+    id: null,
     title: '',
     description: '',
     priority: '',
@@ -95,7 +95,7 @@
   function handleSubmit() {
     // Armazena novos valores vindos do formulário
     const newTaskValues = ref<Task>({
-      id: (document.getElementById('id') as HTMLInputElement) ? (document.getElementById('id') as HTMLInputElement).value : Date.now(),
+      id: (document.getElementById('id') as HTMLInputElement) ? parseInt((document.getElementById('id') as HTMLInputElement).value) : Date.now(),
       title: (document.getElementById('title') as HTMLInputElement).value,
       description: (document.getElementById('description') as HTMLInputElement).value,
       priority: (document.getElementById('priority') as HTMLInputElement).value,
