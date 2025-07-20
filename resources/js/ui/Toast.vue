@@ -1,42 +1,30 @@
-<script lang="ts" setup>
-  import { PropType, ref, watch, nextTick } from 'vue';
+<script setup lang="ts">
+  import { ref } from 'vue';
 
-  const toast = ref();
-
-  const { type, message } = defineProps({
-    type: {
-      type: String as PropType<string>,
-      required: true
-    },
-    message: {
-      type: String as PropType<string>,
-      required: true
-    }
-  });
-  
   const show = ref(false);
+  const type = ref('');
+  const message = ref('');  
 
-  watch(
-    () => [type, message],
-    async([newType, newMessage]) => {
-      if(newType && newMessage) {
-        show.value = true;
+  function showToast(toastProps: any) {
+    type.value = toastProps.type || 'success';
+    message.value = toastProps.message;
+    show.value = true;
 
-        await nextTick();
-        setTimeout(() => show.value = false, 5000);
-      }
-    },
-    { immediate: true }
-  );
-    
+    setTimeout(() => {
+      show.value = false; // Define a visibilidade como false
+    }, 3000);
+  }
+  
+  // Expõe função para ser usada de fora do componente
+  defineExpose({ showToast });
+
 </script>
 
 <template>
   <div
-    ref="toast"
-    class="bottom-4 right-4 z-50 flex gap-4 items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow overflow-hidden after:content-[''] after:absolute after:top-0 after:left-0 after:h-full after:w-1"
+    v-if="show"
+    class="fixed bottom-4 right-4 z-50 flex gap-4 items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow overflow-hidden after:content-[''] after:absolute after:top-0 after:left-0 after:h-full after:w-1"
     :class="[
-      show ? 'fixed' : 'hidden', 
       type === 'success' ? 'after:bg-emerald-500' : '',
       type === 'error' ? 'after:bg-red-500' : '',
       type === 'warning' ? 'after:bg-yellow-500' : ''

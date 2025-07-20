@@ -16,12 +16,7 @@
     message: '' as string
   });
 
-  function showToast(toastProps: any) {
-    if(toastProps.message) {
-      toastProps.type = toastProps.type || 'success';
-      toastProps.message = toastProps.message;
-    }
-  }
+  const toastRef = ref<InstanceType<typeof Toast> | null>(null); // Instancia o Toast
 
   const emit = defineEmits(['submit']);
 
@@ -133,7 +128,7 @@
 
       validation = false;
 
-      showToast(toastProps)
+      toastRef.value?.showToast(toastProps);
     }
 
     else {
@@ -143,7 +138,7 @@
 
         validation = false;
 
-        showToast(toastProps)
+        toastRef.value?.showToast(toastProps);
       }
 
       else if (typeof task.description !== 'string') {
@@ -152,7 +147,7 @@
 
         validation = false;
 
-        showToast(toastProps)
+        toastRef.value?.showToast(toastProps);
       }
 
       else if(typeof task.priority !== 'string') {
@@ -161,7 +156,7 @@
 
         validation = false;
 
-        showToast(toastProps)
+        toastRef.value?.showToast(toastProps);
       }
 
       else if(typeof task.title !== 'string') {
@@ -170,7 +165,7 @@
 
         validation = false;
 
-        showToast(toastProps)
+        toastRef.value?.showToast(toastProps);
       }
 
       else if(typeof task.title !== 'string') {
@@ -179,7 +174,7 @@
 
         validation = false;
 
-        showToast(toastProps)
+        toastRef.value?.showToast(toastProps);
       }
 
       else {
@@ -194,7 +189,7 @@
 
 <template>
   <div>
-    <Toast :type="toastProps.type" :message="toastProps.message" />
+    <Toast ref="toastRef" />
 
     <Header :breadcrumbLinks="breadcrumbLinks" />
     
