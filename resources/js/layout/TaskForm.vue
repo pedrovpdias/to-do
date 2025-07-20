@@ -1,14 +1,27 @@
 <script setup lang="ts">
   import Header from '../ui/Header.vue';
+  import Toast from '../ui/Toast.vue';
 
   import Label from '../components/form/Label.vue';
   import Input from '../components/form/Input.vue';
   import Textarea from '../components/form/Textarea.vue';
   import Select from '../components/form/Select.vue';
 
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, reactive } from 'vue';
 
   import { useRoute, useRouter } from 'vue-router';
+
+  const toastProps = reactive({
+    type: '' as string,
+    message: '' as string
+  });
+
+  function showToast(toastProps: any) {
+    if(toastProps.message) {
+      toastProps.type = toastProps.type || 'success';
+      toastProps.message = toastProps.message;
+    }
+  }
 
   const emit = defineEmits(['submit']);
 
@@ -52,26 +65,26 @@
 
   const priorityOptions = [
     {
-      label: 'Alta' as string,
-      value: 'high' as string
+      label: 'Baixa' as string,
+      value: 'low' as string
     },
     {
       label: 'Media' as string,
       value: 'medium' as string
     },
     {
-      label: 'Baixa' as string,
-      value: 'low' as string
-    }
+      label: 'Alta' as string,
+      value: 'high' as string
+    },
   ];
 
   const categoryOptions = [
     {
-      label: 'Trabalho' as string,
+      label: 'Pessoal' as string,
       value: '1' as string
     },
     {
-      label: 'Pessoal' as string,
+      label: 'Trabalho' as string,
       value: '2' as string
     },
     {
@@ -105,15 +118,85 @@
       favorite: favorite.value,
       created_at: task.value.created_at ? task.value.created_at : new Date().toISOString()
     });
+
+    if(!validateForm(newTaskValues.value)) return;
     
     emit('submit', newTaskValues.value);
+  }
+
+  function validateForm(task: any) {
+    let validation = true;
+    
+    if(task.title === '' || task.description === '' || task.priority === '' || task.category === '' || task.deadline === '') { 
+      toastProps.type = 'error';
+      toastProps.message = 'Preencha todos os campos!';
+
+      validation = false;
+
+      showToast(toastProps)
+    }
+
+    else {
+      if(typeof task.title !== 'string') {
+        toastProps.type = 'error';
+        toastProps.message = 'Insira um título valido para a tarefa!';
+
+        validation = false;
+
+        showToast(toastProps)
+      }
+
+      else if (typeof task.description !== 'string') {
+        toastProps.type = 'error';
+        toastProps.message = 'Insira uma descrição válida para a tarefa!';
+
+        validation = false;
+
+        showToast(toastProps)
+      }
+
+      else if(typeof task.priority !== 'string') {
+        toastProps.type = 'error';
+        toastProps.message = 'Insira uma prioridade válida para a tarefa!';
+
+        validation = false;
+
+        showToast(toastProps)
+      }
+
+      else if(typeof task.title !== 'string') {
+        toastProps.type = 'error';
+        toastProps.message = 'Insira uma categoria válida para a tarefa!';
+
+        validation = false;
+
+        showToast(toastProps)
+      }
+
+      else if(typeof task.title !== 'string') {
+        toastProps.type = 'error';
+        toastProps.message = 'Informe uma data válida para a conclusão da tarefa!';
+
+        validation = false;
+
+        showToast(toastProps)
+      }
+
+      else {
+        validation = true;
+      }
+    }
+    
+    return validation;
   }
 
 </script>
 
 <template>
   <div>
-      <Header :breadcrumbLinks="breadcrumbLinks" />
+    <Toast :type="toastProps.type" :message="toastProps.message" />
+
+    <Header :breadcrumbLinks="breadcrumbLinks" />
     
     <form @submit.prevent="" class="flex flex-col items-start p-8 gap-8" @submit="handleSubmit" novalidate>
         <div class="flex flex-col">
