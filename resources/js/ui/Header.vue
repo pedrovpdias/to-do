@@ -5,7 +5,6 @@
 
   const router = useRouter();
   const history = window.history.state.back;
-  console.log(history);
 
   const { breadcrumbLinks } = defineProps({
     breadcrumbLinks: {
