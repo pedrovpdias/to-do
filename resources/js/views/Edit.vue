@@ -2,14 +2,12 @@
   import TaskForm from '../layout/TaskForm.vue';
   import Toast from '../ui/Toast.vue';
 
-  import { ref, defineEmits, reactive } from 'vue';
+  import { ref, reactive } from 'vue';
 
   import { useRoute } from 'vue-router';
 
   const tasks = ref<any[]>([]);
   const task = ref<any>(null);
-  
-  const emit = defineEmits(['showToast']);
 
   // Pega a ID da tarefa da URL
   const route = useRoute();
