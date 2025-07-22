@@ -1,12 +1,16 @@
 <script setup lang="ts">
   import TaskForm from '../layout/TaskForm.vue';
-  
-  // import { useTemplateRef } from 'vue';
-  import { useRouter } from 'vue-router';
+  import Toast from '../ui/Toast.vue';
 
-  const router = useRouter();
+  import { ref, reactive } from 'vue';
+import func from '../../../vue-temp/vue-editor-bridge';
 
-  // const advancedOptions = useTemplateRef<HTMLDivElement>('advanced-options'); // Referencia do elemento de opções avançadas
+  const toastProps = reactive({
+    type: '' as string,
+    message: '' as string
+  });
+
+  const toastRef = ref<InstanceType<typeof Toast> | null>(null); // Instancia o Toast
 
   const breadcrumbLinks = [
     {
@@ -19,29 +23,6 @@
     }
   ];
 
-  // const recurrenceOptions = [
-  //   {
-  //     label: '--' as string,
-  //     value: '0' as string
-  //   },
-  //   {
-  //     label: 'Diariamente' as string,
-  //     value: '1' as string
-  //   },
-  //   {
-  //     label: 'Semanalmente' as string,
-  //     value: '2' as string
-  //   },
-  //   {
-  //     label: 'Mensalmente' as string,
-  //     value: '3' as string
-  //   },
-  //   {
-  //     label: 'Anualmente' as string,
-  //     value: '4' as string
-  //   }
-  // ]
-
   // Salva a tarefa no local storage
   function handleTaskCreation(task: any) {
     // Busca as tarefas salvas no local storage
@@ -53,25 +34,36 @@
     // Salva as tarefas atualizadas no local storage
     localStorage.setItem('tasks', JSON.stringify(tasks));
 
-    // Redireciona para a tela inicial
-    router.push({
-      path: '/',
-      query: {
-        toasType: 'success',
-        toasMessage: 'Tarefa criada com sucesso!'
-      }
-    });
+    showToast();
 
+    clearForm();
+
+  }
+
+  function showToast() { 
+    toastProps.type = 'success';
+    toastProps.message = 'Tarefa criada com sucesso!';
+
+    toastRef.value?.showToast(toastProps);
+  }
+
+  function clearForm() {
+    const form = document.querySelector('form') as HTMLFormElement;
+    form.reset();
   }
 
 </script>
 
 <template>
-  <TaskForm 
-    @submit="handleTaskCreation"
-    :title="'Nova tarefa'"
-    :description="'Insira abaixo os detalhes da tarefa que deseja criar'"
-    :breadcrumbLinks="breadcrumbLinks" 
-    :buttonText="'Criar tarefa'"
-  />
+  <div>
+    <Toast ref="toastRef" />
+
+    <TaskForm 
+      @submit="handleTaskCreation"
+      :title="'Nova tarefa'"
+      :description="'Insira abaixo os detalhes da tarefa que deseja criar'"
+      :breadcrumbLinks="breadcrumbLinks" 
+      :buttonText="'Criar tarefa'"
+    />
+  </div>
 </template>

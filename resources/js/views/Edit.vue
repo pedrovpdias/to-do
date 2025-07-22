@@ -20,6 +20,8 @@
     message: '' as string
   });
 
+  const toastRef = ref<InstanceType<typeof Toast> | null>(null); // Instancia o Toast
+
   const breadcrumbLinks = [
     {
       url: '/' as string,
@@ -47,6 +49,8 @@
   function showToast() { 
     toastProps.type = 'success';
     toastProps.message = 'Tarefa alterada com sucesso!';
+
+    toastRef.value?.showToast(toastProps);
   }
 
   function loadTask() {
@@ -62,7 +66,7 @@
 
 <template>
   <div>
-    <Toast :type="toastProps.type" :message="toastProps.message" />
+    <Toast ref="toastRef" />
 
     <TaskForm 
       @submit="handleUpdate"

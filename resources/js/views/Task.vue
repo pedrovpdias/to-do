@@ -31,6 +31,8 @@
     }
   ];
 
+  const today = new Date().toISOString().split('T')[0];
+
   function loadTask(filter?: string) {
     const saved = localStorage.getItem('tasks');
     tasks.value = saved ? JSON.parse(saved) : [];
@@ -154,7 +156,7 @@
             {{ formatDate(task.deadline) }}
 
             <span
-              v-if="task.deadline < new Date().toISOString().split('T') && !task.done"
+              v-if="task.deadline < today && !task.done"
               class="text-xs flex items-center gap-2  px-2 py-1 rounded-full"
               :class="[
                 task.priority === 'high' ? 'text-red-500 bg-red-100' : 'text-slate-400 bg-slate-100'
