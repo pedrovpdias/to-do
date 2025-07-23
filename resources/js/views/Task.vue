@@ -6,7 +6,7 @@
 
   import { useRoute, useRouter } from 'vue-router';
 
-  import { defineEmits, ref, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
 
   const emit = defineEmits(['toggleFavorite', 'handleDeleteTask']);
 

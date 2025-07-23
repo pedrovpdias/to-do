@@ -3,7 +3,6 @@
   import Toast from '../ui/Toast.vue';
 
   import { ref, reactive } from 'vue';
-import func from '../../../vue-temp/vue-editor-bridge';
 
   const toastProps = reactive({
     type: '' as string,
