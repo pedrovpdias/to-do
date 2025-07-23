@@ -1,12 +1,13 @@
 <script setup lang="ts">
   import Header from '../ui/Header.vue';
+  import Toast from '../ui/Toast.vue';
 
   import PriorityIndicator from '../components/PriorityIndicator.vue';
   import TaskButtonGroup from '../components/TaskButtonGroup.vue';
 
   import { useRoute, useRouter } from 'vue-router';
 
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, reactive } from 'vue';
 
   const emit = defineEmits(['toggleFavorite', 'handleDeleteTask']);
 
@@ -90,12 +91,34 @@
         }
       });
     }
-  })
+
+    // Verifica query params
+    if(route.query.toastMessage) {
+      showToast(route.query.toastType || 'success', route.query.toastMessage);
+    }
+    
+  });
+
+
+  const toastProps = reactive({
+    type: '' as string,
+    message: '' as string
+  });
+
+  const toastRef = ref<InstanceType<typeof Toast> | null>(null); // Instancia o Toast
+  function showToast(type, message) { 
+    toastProps.type = type;
+    toastProps.message = message; 
+
+    toastRef.value?.showToast(toastProps);
+  }
 </script>
 
 <template>
   <div>
     <Header :breadcrumbLinks="breadcrumbLinks" />
+
+    <Toast ref="toastRef" />
 
     <section v-if="task">
       <h2 id="task-title" class="sr-only">
