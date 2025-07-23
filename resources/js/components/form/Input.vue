@@ -22,10 +22,6 @@
       type: String as PropType<string | null>,
       required: false
     },
-    vModel: {
-      type: String as PropType<string | null>,
-      required: false
-    },
     value: {
       type: String  as PropType<string | null>,
       required: false
@@ -41,7 +37,6 @@
     :ref="inputRef"
     :placeholder="placeholder || ''"
     :event="event || null"
-    :v-model="vModel || null"
     :value="value || null"
     :class="[
       type !== 'hidden' 
